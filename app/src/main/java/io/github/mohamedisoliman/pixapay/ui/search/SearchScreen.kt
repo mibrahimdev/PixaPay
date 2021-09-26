@@ -1,26 +1,37 @@
 package io.github.mohamedisoliman.pixapay.ui.search
 
-import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import io.github.mohamedisoliman.pixapay.R
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 
 
@@ -45,7 +56,7 @@ fun SearchScreen() {
         SearchTopbar()
 
         LazyVerticalGrid(
-            modifier = Modifier,
+            modifier = Modifier.padding(8.dp),
             cells = GridCells.Fixed(if (currentConfig.isPortrait()) 1 else 2),
             content = {
                 itemsIndexed(viewModel.testImages) { _, item -> ImageCard(image = item) }
@@ -57,7 +68,37 @@ fun SearchScreen() {
 
 @Composable
 fun SearchTopbar() {
+    Column(modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp)) {
+        var textState by remember { mutableStateOf("") }
 
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = textState,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.surface,
+                cursorColor = MaterialTheme.colors.onSurface,
+                disabledLabelColor = MaterialTheme.colors.surface,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            onValueChange = {
+                textState = it
+            },
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+            trailingIcon = {
+                IconButton(onClick = {
+                    // TODO:
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Search,
+                        tint = MaterialTheme.colors.onSurface,
+                        contentDescription = ""
+                    )
+                }
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -77,7 +118,8 @@ fun ImageCard(
                 startY = 100f
             )
         )
-        .height(300.dp),
+        .height(300.dp)
+        .clip(RoundedCornerShape(8.dp)),
         contentAlignment = Alignment.BottomStart
     ) {
         Image(
