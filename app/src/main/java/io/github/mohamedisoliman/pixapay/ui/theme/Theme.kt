@@ -1,7 +1,6 @@
 package io.github.mohamedisoliman.pixapay.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -13,8 +12,8 @@ private val DarkColorPalette = darkColors(
     primaryVariant = Purple700,
     secondary = Teal200,
 
-//    background = darkBlue,
-    surface = darkBlue,
+    background = DarkBlack,
+    surface = Purple700,
 )
 
 private val LightColorPalette = lightColors(
@@ -23,7 +22,7 @@ private val LightColorPalette = lightColors(
     secondary = Teal200,
 
 //    background = lightBlue,
-    surface = lightBlue,
+    surface = LightBlue,
     onPrimary = Color.White,
     onSecondary = Color.Black,
     onBackground = Color.Black,

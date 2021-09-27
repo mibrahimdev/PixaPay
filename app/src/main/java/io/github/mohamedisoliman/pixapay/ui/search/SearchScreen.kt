@@ -1,5 +1,6 @@
 package io.github.mohamedisoliman.pixapay.ui.search
 
+import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,7 +19,9 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
@@ -41,64 +44,73 @@ fun PreviewSearch() {
     SearchScreen()
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchScreen() {
 
     val viewModel: SearchImagesViewModel = viewModel()
-    val currentConfig = LocalConfiguration.current
-    val width = currentConfig.screenHeightDp.dp
-    Column(
-        modifier = Modifier.padding(8.dp),
-        verticalArrangement = Arrangement.SpaceAround,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
+        contentAlignment = Alignment.TopCenter
+//        verticalArrangement = Arrangement.SpaceAround,
+//        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        ImageListView(viewModel)
         SearchTopbar()
 
-        LazyVerticalGrid(
-            modifier = Modifier.padding(8.dp),
-            cells = GridCells.Fixed(if (currentConfig.isPortrait()) 1 else 2),
-            content = {
-                itemsIndexed(viewModel.testImages) { _, item -> ImageCard(image = item) }
-            }
-        )
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun ImageListView(
+    viewModel: SearchImagesViewModel,
+) {
+    val currentConfig = LocalConfiguration.current
+    LazyVerticalGrid(
+        contentPadding = PaddingValues(top = TextFieldDefaults.MinHeight + 16.dp),
+        modifier = Modifier,
+        cells = GridCells.Fixed(if (currentConfig.isPortrait()) 2 else 4),
+        content = {
+            itemsIndexed(viewModel.testImages) { _, item ->
+                ImageCard(modifier = Modifier.padding(8.dp), image = item)
+            }
+        }
+    )
 }
 
 
 @Composable
 fun SearchTopbar() {
-    Column(modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp)) {
-        var textState by remember { mutableStateOf("") }
-
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = textState,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.surface,
-                cursorColor = MaterialTheme.colors.onSurface,
-                disabledLabelColor = MaterialTheme.colors.surface,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            onValueChange = {
-                textState = it
-            },
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true,
-            trailingIcon = {
-                IconButton(onClick = {
-                    // TODO:
-                }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Search,
-                        tint = MaterialTheme.colors.onSurface,
-                        contentDescription = ""
-                    )
-                }
+    var textState by remember { mutableStateOf("") }
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 8.dp),
+        value = textState,
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = MaterialTheme.colors.surface.copy(alpha = .9f),
+            cursorColor = MaterialTheme.colors.onSurface,
+            disabledLabelColor = MaterialTheme.colors.surface,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
+        onValueChange = {
+            textState = it
+        },
+        shape = RoundedCornerShape(8.dp),
+        singleLine = true,
+        trailingIcon = {
+            IconButton(onClick = {
+                // TODO:
+            }) {
+                Icon(
+                    imageVector = Icons.Outlined.Search,
+                    tint = MaterialTheme.colors.onSurface,
+                    contentDescription = ""
+                )
             }
-        )
-    }
+        }
+    )
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -109,22 +121,12 @@ fun ImageCard(
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
-        .background(
-            brush = Brush.verticalGradient(
-                colors = listOf(
-                    Color.Transparent,
-                    Color.Black
-                ),
-                startY = 100f
-            )
-        )
-        .height(300.dp)
-        .clip(RoundedCornerShape(8.dp)),
+        .height(200.dp)
+        .clip(RoundedCornerShape(16.dp)),
         contentAlignment = Alignment.BottomStart
     ) {
         Image(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             painter = rememberImagePainter(image.url),
             contentDescription = "",
             contentScale = ContentScale.Crop
@@ -161,15 +163,14 @@ private fun ImageChips(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .height(200.dp)
             .background(brush = Brush.verticalGradient(
                 colors = listOf(
                     Color.Transparent,
                     Color.Black
                 ),
-                startY = 100f
             ))
+            .fillMaxWidth()
+            .height(200.dp)
             .padding(start = 16.dp, end = 16.dp),
     ) {
         Column(
