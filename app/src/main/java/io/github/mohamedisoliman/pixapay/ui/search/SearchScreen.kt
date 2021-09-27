@@ -21,10 +21,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import io.github.mohamedisoliman.pixapay.ui.Screen
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 
@@ -32,17 +30,17 @@ import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 @Preview
 @Composable
 fun PreviewSearch() {
-
+    SearchScreen(PreviewData.images) {}
 }
 
 @Composable
-fun SearchScreen(viewModel: SearchImagesViewModel, onImageClicked: (Long) -> Unit) {
+fun SearchScreen(images: List<ImageUiModel>, onImageClicked: (Long) -> Unit) {
 
     Box(
         modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-        ImageListView(viewModel, onImageClicked)
+        ImageListView(images, onImageClicked)
         SearchTopbar()
 
     }
@@ -51,7 +49,7 @@ fun SearchScreen(viewModel: SearchImagesViewModel, onImageClicked: (Long) -> Uni
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ImageListView(
-    viewModel: SearchImagesViewModel,
+    images: List<ImageUiModel>,
     onImageClicked: (Long) -> Unit,
 ) {
     val currentConfig = LocalConfiguration.current
@@ -60,7 +58,7 @@ private fun ImageListView(
         modifier = Modifier,
         cells = GridCells.Fixed(if (currentConfig.isPortrait()) 2 else 4),
         content = {
-            itemsIndexed(viewModel.images) { _, item ->
+            itemsIndexed(images) { _, item ->
                 ImageCard(
                     modifier = Modifier.padding(8.dp),
                     image = item,

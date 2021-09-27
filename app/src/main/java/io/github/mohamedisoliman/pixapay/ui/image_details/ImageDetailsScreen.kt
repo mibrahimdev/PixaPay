@@ -13,18 +13,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.coil.rememberCoilPainter
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.search.ImageUiModel
-import io.github.mohamedisoliman.pixapay.ui.search.SearchImagesViewModel
-import io.github.mohamedisoliman.pixapay.ui.search.previewImage
+import io.github.mohamedisoliman.pixapay.ui.search.PreviewData
 
 
 @Preview
 @Composable
 fun PreviewImageDetails() {
-    ImageDetailsScreen(previewImage)
+    ImageDetailsScreen(PreviewData.image)
 }
 
 @OptIn(ExperimentalComposeUiApi::class)

@@ -30,7 +30,7 @@ fun AppNavigation(
 
             val viewModel: SearchImagesViewModel = viewModel()
 
-            SearchScreen(viewModel) {
+            SearchScreen(viewModel.images) {
                 navController.navigate("${Screen.ImageDetails.route}/${it}")
             }
         }

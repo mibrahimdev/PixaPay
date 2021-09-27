@@ -4,11 +4,7 @@ import androidx.lifecycle.ViewModel
 
 class SearchImagesViewModel : ViewModel() {
 
-    val images = (0..20).map { previewImage }
-        .mapIndexed { index, imageUiModel ->
-            imageUiModel.copy(userName = "User$index",
-                imageId = index + 100L)
-        }
+    val images = PreviewData.images
 
 
     fun findImage(id: Long): ImageUiModel? {
