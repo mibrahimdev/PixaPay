@@ -2,23 +2,20 @@ package io.github.mohamedisoliman.pixapay.ui.search
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 
 
@@ -107,6 +105,7 @@ fun SearchTopbar(modifier: Modifier = Modifier) {
 fun ImageCard(
     modifier: Modifier = Modifier,
     image: ImageUiModel,
+    showExtraChips: Boolean = false,
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
@@ -121,75 +120,25 @@ fun ImageCard(
             contentScale = ContentScale.Crop
         )
 
-        ImageChips(image = image)
+        ImageChips(image = image, showExtraChips = showExtraChips)
     }
 }
 
 @Composable
-fun UserChip(userName: String) {
+fun IconChip(icon: ImageVector, text: String) {
     Row(
         modifier = Modifier.wrapContentSize(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
-            imageVector = Icons.Outlined.Person,
+            imageVector = icon,
             contentDescription = "",
             tint = Color.White
         )
         Text(
-            text = userName,
+            text = text,
             style = MaterialTheme.typography.caption.copy(color = Color.White),
         )
     }
-}
-
-@Composable
-private fun ImageChips(
-    modifier: Modifier = Modifier,
-    image: ImageUiModel,
-) {
-
-    Box(
-        modifier = modifier
-            .background(brush = Brush.verticalGradient(
-                colors = listOf(
-                    Color.Transparent,
-                    Color.Black
-                ),
-            ))
-            .fillMaxWidth()
-            .height(200.dp)
-            .padding(start = 16.dp, end = 16.dp),
-    ) {
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(bottom = 16.dp),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            UserChip(image.userName)
-            LazyRow(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                content = {
-                    itemsIndexed(image.tags) { _, item ->
-                        Chip(tagName = item)
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun Chip(
-    modifier: Modifier = Modifier,
-    tagName: String,
-) {
-    Text(
-        text = tagName,
-        style = MaterialTheme.typography.caption.copy(color = Color.White)
-    )
 }

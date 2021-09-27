@@ -13,11 +13,17 @@ val previewImage = ImageUiModel(
         "nature",
         "landscape",
         "outing"
-    ).map { "#$it" }
+    ).map { "#$it" },
+    likes = 23.toString(),
+    downloads = 330.toString(),
+    comments = 16.toString()
 )
 
 data class ImageUiModel(
     val userName: String,
     val url: String,
+    val likes: String,
+    val downloads: String,
+    val comments: String,
     val tags: List<String>,
 )
