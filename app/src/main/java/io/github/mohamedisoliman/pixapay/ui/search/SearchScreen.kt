@@ -2,6 +2,7 @@ package io.github.mohamedisoliman.pixapay.ui.search
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import io.github.mohamedisoliman.pixapay.ui.Screen
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 
@@ -30,18 +32,17 @@ import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 @Preview
 @Composable
 fun PreviewSearch() {
-    SearchScreen()
+
 }
 
 @Composable
-fun SearchScreen() {
+fun SearchScreen(viewModel: SearchImagesViewModel, onImageClicked: (Long) -> Unit) {
 
-    val viewModel: SearchImagesViewModel = viewModel()
     Box(
         modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-        ImageListView(viewModel)
+        ImageListView(viewModel, onImageClicked)
         SearchTopbar()
 
     }
@@ -51,6 +52,7 @@ fun SearchScreen() {
 @Composable
 private fun ImageListView(
     viewModel: SearchImagesViewModel,
+    onImageClicked: (Long) -> Unit,
 ) {
     val currentConfig = LocalConfiguration.current
     LazyVerticalGrid(
@@ -58,8 +60,12 @@ private fun ImageListView(
         modifier = Modifier,
         cells = GridCells.Fixed(if (currentConfig.isPortrait()) 2 else 4),
         content = {
-            itemsIndexed(viewModel.testImages) { _, item ->
-                ImageCard(modifier = Modifier.padding(8.dp), image = item)
+            itemsIndexed(viewModel.images) { _, item ->
+                ImageCard(
+                    modifier = Modifier.padding(8.dp),
+                    image = item,
+                    onImageClicked = onImageClicked
+                )
             }
         }
     )
@@ -106,11 +112,13 @@ fun ImageCard(
     modifier: Modifier = Modifier,
     image: ImageUiModel,
     showExtraChips: Boolean = false,
+    onImageClicked: (Long) -> Unit,
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
         .height(200.dp)
-        .clip(RoundedCornerShape(16.dp)),
+        .clip(RoundedCornerShape(16.dp))
+        .clickable { onImageClicked(image.imageId) },
         contentAlignment = Alignment.BottomStart
     ) {
         Image(

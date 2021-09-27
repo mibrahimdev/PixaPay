@@ -13,21 +13,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.coil.rememberCoilPainter
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
+import io.github.mohamedisoliman.pixapay.ui.search.ImageUiModel
+import io.github.mohamedisoliman.pixapay.ui.search.SearchImagesViewModel
 import io.github.mohamedisoliman.pixapay.ui.search.previewImage
 
 
 @Preview
 @Composable
 fun PreviewImageDetails() {
-    ImageDetailsScreen()
+    ImageDetailsScreen(previewImage)
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ImageDetailsScreen() {
-    val image = previewImage
+fun ImageDetailsScreen(image: ImageUiModel) {
 
     var scale by remember { mutableStateOf(1f) }
     val rotationState = remember { mutableStateOf(1f) }
@@ -57,6 +59,7 @@ fun ImageDetailsScreen() {
         ImageChips(
             modifier = Modifier.align(Alignment.BottomCenter),
             image = image,
+            showExtraChips = true
         )
     }
 
