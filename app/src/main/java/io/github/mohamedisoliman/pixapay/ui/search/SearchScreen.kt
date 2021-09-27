@@ -1,6 +1,5 @@
 package io.github.mohamedisoliman.pixapay.ui.search
 
-import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,29 +11,21 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import io.github.mohamedisoliman.pixapay.R
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 
 
@@ -51,8 +42,6 @@ fun SearchScreen() {
     Box(
         modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
         contentAlignment = Alignment.TopCenter
-//        verticalArrangement = Arrangement.SpaceAround,
-//        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ImageListView(viewModel)
         SearchTopbar()
@@ -80,15 +69,15 @@ private fun ImageListView(
 
 
 @Composable
-fun SearchTopbar() {
+fun SearchTopbar(modifier: Modifier = Modifier) {
     var textState by remember { mutableStateOf("") }
     TextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 8.dp),
         value = textState,
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colors.surface.copy(alpha = .9f),
+            backgroundColor = MaterialTheme.colors.surface,
             cursorColor = MaterialTheme.colors.onSurface,
             disabledLabelColor = MaterialTheme.colors.surface,
             focusedIndicatorColor = Color.Transparent,
