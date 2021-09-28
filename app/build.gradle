@@ -71,4 +71,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-runtime-ktx:2.3.5'
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha09")
 
+
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.6.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
+    implementation 'com.github.simonpercic:oklog:2.3.0'
+
 }
