@@ -29,8 +29,7 @@ fun AppNavigation(
         composable(Screen.Search.route) {
 
             val viewModel: SearchImagesViewModel = viewModel()
-
-            SearchScreen(viewModel.images) {
+            SearchScreen(viewModel) {
                 navController.navigate("${Screen.ImageDetails.route}/${it}")
             }
         }

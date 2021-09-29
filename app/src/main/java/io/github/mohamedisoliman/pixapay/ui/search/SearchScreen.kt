@@ -30,12 +30,20 @@ import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 @Preview
 @Composable
 fun PreviewSearch() {
-    SearchScreen(PreviewData.images) {}
+    SearchScreenContent(PreviewData.images)
 }
 
 @Composable
-fun SearchScreen(images: List<ImageUiModel>, onImageClicked: (Long) -> Unit) {
+fun SearchScreen(viewModel: SearchImagesViewModel, onImageClicked: (Long) -> Unit = { }) {
 
+    SearchScreenContent(viewModel.images, onImageClicked)
+}
+
+@Composable
+private fun SearchScreenContent(
+    images: List<ImageUiModel>,
+    onImageClicked: (Long) -> Unit = {},
+) {
     Box(
         modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
         contentAlignment = Alignment.TopCenter
