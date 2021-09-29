@@ -18,6 +18,9 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        buildConfigField("String", "API_KEY", API_KEY)
+        buildConfigField("String", "BASE_URL", BASE_URL)
     }
 
     buildTypes {
@@ -75,6 +78,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.6.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
-    implementation 'com.github.simonpercic:oklog:2.3.0'
 
 }
