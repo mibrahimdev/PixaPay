@@ -3,6 +3,7 @@ package io.github.mohamedisoliman.pixapay.data.remote
 import io.github.mohamedisoliman.pixapay.BuildConfig
 import io.github.mohamedisoliman.pixapay.data.entities.PixabaySearchDto
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -28,23 +29,30 @@ interface PixabayApi {
 }
 
 
-fun pixabayApi(): PixabayApi {
+fun pixabayApi(
+    baseUrl: HttpUrl = BuildConfig.BASE_URL.toHttpUrl(),
+    client: () -> OkHttpClient = { makeOkHttpClient() },
+): PixabayApi {
     val retrofit = Retrofit.Builder()
-        .baseUrl(BuildConfig.BASE_URL)
+        .baseUrl(baseUrl)
         .addConverterFactory(MoshiConverterFactory.create())
-        .client(makeOkHttpClient())
+        .client(client())
         .build()
 
     return retrofit.create(PixabayApi::class.java)
 }
 
-fun makeOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
-    .addInterceptor(loggingInterceptor())
-    .addInterceptor(authorizationInterceptor())
-    .build()
+fun makeOkHttpClient(
+    logging: () -> Interceptor = { loggingInterceptor() },
+    authorization: () -> Interceptor = { authorizationInterceptor() },
+): OkHttpClient =
+    OkHttpClient.Builder()
+        .addInterceptor(logging())
+        .addInterceptor(authorization())
+        .build()
 
 private fun authorizationInterceptor() = Interceptor {
-    val url: HttpUrl = it.request().url()
+    val url: HttpUrl = it.request().url
         .newBuilder()
         .addQueryParameter("key", BuildConfig.API_KEY)
         .build()
@@ -52,7 +60,7 @@ private fun authorizationInterceptor() = Interceptor {
     it.proceed(request)
 }
 
-private fun loggingInterceptor() =
+private fun loggingInterceptor(): Interceptor =
     HttpLoggingInterceptor().also {
         it.level = HttpLoggingInterceptor.Level.BODY
     }
