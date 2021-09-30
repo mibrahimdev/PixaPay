@@ -32,13 +32,13 @@ import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 import io.github.mohamedisoliman.pixapay.ui.common.toUiModel
 import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
-import io.github.mohamedisoliman.pixapay.ui.search.SearchViewState.*
+import io.github.mohamedisoliman.pixapay.ui.search.SearchState.*
 
 
 @Preview
 @Composable
 fun PreviewSearch() {
-    SearchScreenContent(searchViewState = Empty)
+    SearchScreenContent(searchState = Empty)
 }
 
 @Composable
@@ -49,7 +49,7 @@ fun SearchScreen(viewModel: SearchImagesViewModel, onNavigateClicked: (Long) -> 
     SearchScreenContent(
         onImageClicked = onNavigateClicked,
         searchText = query,
-        searchViewState = viewState,
+        searchState = viewState,
         onSearchChange = { viewModel.onSearchChange(it) },
         onSearchClicked = { viewModel.onSearchClicked() }
     )
@@ -93,7 +93,7 @@ private fun SearchScreenContent(
     searchText: String = "",
     onSearchChange: (String) -> Unit = {},
     onSearchClicked: () -> Unit = {},
-    searchViewState: SearchViewState = Empty,
+    searchState: SearchState = Empty,
     onImageClicked: (Long) -> Unit = {},
 ) {
     var showDialog by remember { mutableStateOf(false) }
@@ -104,20 +104,20 @@ private fun SearchScreenContent(
         contentAlignment = Alignment.TopCenter
     ) {
 
-        when (searchViewState) {
-            is Result -> ImageListView(searchViewState.images) {
+        when (searchState) {
+            is Result -> ImageListView(searchState.images) {
                 imageId = it
                 showDialog = true
             }
             is Empty -> EmptyView(modifier = Modifier.align(Alignment.Center))
-            is Error -> ErrorView(searchViewState.throwable)
+            is Error -> ErrorView(searchState.throwable)
         }
 
         SearchTopbar(
             searchText = searchText,
             onSearchChange = onSearchChange,
             onSearchClicked = onSearchClicked,
-            isLoading = searchViewState is Loading,
+            isLoading = searchState is Loading,
         )
 
     }

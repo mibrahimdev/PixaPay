@@ -3,11 +3,9 @@ package io.github.mohamedisoliman.pixapay.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.mohamedisoliman.pixapay.data.ImagesRepository
-import io.github.mohamedisoliman.pixapay.data.remote.pixabayApi
 import io.github.mohamedisoliman.pixapay.domain.SearchUsecase
 import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
-import io.github.mohamedisoliman.pixapay.ui.search.SearchViewState.*
+import io.github.mohamedisoliman.pixapay.ui.search.SearchState.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -16,7 +14,7 @@ class SearchImagesViewModel @Inject constructor(
     val searchUsecase: SearchUsecase,
 ) : ViewModel() {
 
-    var searchViewState = MutableStateFlow<SearchViewState>(Empty)
+    var searchViewState = MutableStateFlow<SearchState>(Empty)
         private set
 
     var searchQueryState = MutableStateFlow("fruits")
