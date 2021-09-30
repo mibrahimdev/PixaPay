@@ -1,4 +1,4 @@
-package io.github.mohamedisoliman.pixapay.ui.models
+package io.github.mohamedisoliman.pixapay.ui.uiModels
 
 data class ImageUiModel(
     val imageId: Long = -1,

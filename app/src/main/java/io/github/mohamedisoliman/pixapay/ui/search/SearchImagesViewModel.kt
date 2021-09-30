@@ -2,16 +2,18 @@ package io.github.mohamedisoliman.pixapay.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.mohamedisoliman.pixapay.data.ImagesRepository
 import io.github.mohamedisoliman.pixapay.data.remote.pixabayApi
 import io.github.mohamedisoliman.pixapay.domain.SearchUsecase
-import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
+import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
 import io.github.mohamedisoliman.pixapay.ui.search.SearchViewState.*
 import kotlinx.coroutines.flow.*
 
-class SearchImagesViewModel : ViewModel() {
-
-    val searchUsecase = SearchUsecase(ImagesRepository(pixabayApi()))
+@HiltViewModel
+class SearchImagesViewModel(
+    val searchUsecase: SearchUsecase,
+) : ViewModel() {
 
     var searchViewState = MutableStateFlow<SearchViewState>(Empty)
         private set

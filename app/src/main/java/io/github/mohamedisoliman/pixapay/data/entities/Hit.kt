@@ -2,7 +2,7 @@ package io.github.mohamedisoliman.pixapay.data.entities
 
 
 import com.squareup.moshi.Json
-import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
+import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
 
 data class Hit(
     @Json(name = "collections")

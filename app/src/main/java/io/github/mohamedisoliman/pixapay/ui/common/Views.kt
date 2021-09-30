@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.github.mohamedisoliman.pixapay.ui.search.IconChip
-import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
+import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
 
 
 @Composable

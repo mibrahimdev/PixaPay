@@ -31,7 +31,7 @@ import io.github.mohamedisoliman.pixapay.R
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 import io.github.mohamedisoliman.pixapay.ui.common.toUiModel
-import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
+import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
 import io.github.mohamedisoliman.pixapay.ui.search.SearchViewState.*
 
 

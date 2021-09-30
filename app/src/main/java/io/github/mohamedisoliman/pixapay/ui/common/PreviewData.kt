@@ -1,6 +1,6 @@
 package io.github.mohamedisoliman.pixapay.ui.common
 
-import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
+import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
 
 
 object PreviewData {
