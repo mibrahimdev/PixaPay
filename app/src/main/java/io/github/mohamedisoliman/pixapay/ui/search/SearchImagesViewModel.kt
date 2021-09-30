@@ -9,9 +9,10 @@ import io.github.mohamedisoliman.pixapay.domain.SearchUsecase
 import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
 import io.github.mohamedisoliman.pixapay.ui.search.SearchViewState.*
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
 @HiltViewModel
-class SearchImagesViewModel(
+class SearchImagesViewModel @Inject constructor(
     val searchUsecase: SearchUsecase,
 ) : ViewModel() {
 

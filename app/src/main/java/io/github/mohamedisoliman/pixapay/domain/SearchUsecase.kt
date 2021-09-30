@@ -4,8 +4,9 @@ import io.github.mohamedisoliman.pixapay.data.ImagesRepositoryContract
 import io.github.mohamedisoliman.pixapay.data.entities.toImageUiModel
 import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
-class SearchUsecase(
+class SearchUsecase @Inject constructor(
     private val imagesRepository: ImagesRepositoryContract,
 ) : (String) -> Flow<List<ImageUiModel>> {
 
