@@ -7,4 +7,7 @@
     <string name="empty_view_message">Try to search for funny cats!</string>
     <string name="error_message">Something went wrong!</string>
     <string name="network_error_message">Your network is unavailable,\n check your data or wifi and try again</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="dialog_title_open_image_details">Open Image Details!</string>
 </resources>

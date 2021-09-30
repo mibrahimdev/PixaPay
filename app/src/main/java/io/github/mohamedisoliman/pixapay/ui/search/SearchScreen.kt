@@ -42,17 +42,49 @@ fun PreviewSearch() {
 }
 
 @Composable
-fun SearchScreen(viewModel: SearchImagesViewModel, onImageClicked: (Long) -> Unit = { }) {
+fun SearchScreen(viewModel: SearchImagesViewModel, onNavigateClicked: (Long) -> Unit = { }) {
     val viewState by viewModel.searchViewState.collectAsState()
     val query by viewModel.searchQueryState.collectAsState()
 
     SearchScreenContent(
-        onImageClicked = onImageClicked,
+        onImageClicked = onNavigateClicked,
         searchText = query,
         searchViewState = viewState,
         onSearchChange = { viewModel.onSearchChange(it) },
         onSearchClicked = { viewModel.onSearchClicked() }
     )
+}
+
+@Composable
+fun ConfirmationDialog(
+    showDialog: Boolean,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    if (showDialog) {
+        AlertDialog(
+            modifier = Modifier.fillMaxWidth(),
+            title = { Text(stringResource(R.string.dialog_title_open_image_details)) },
+            onDismissRequest = onDismiss,
+            buttons = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.End,
+
+                    ) {
+                    TextButton(onClick = onDismiss) {
+                        Text(text = stringResource(R.string.no))
+                    }
+                    TextButton(onClick = onConfirm) {
+                        Text(text = stringResource(R.string.yes))
+                    }
+
+                }
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -65,14 +97,13 @@ private fun SearchScreenContent(
     onImageClicked: (Long) -> Unit = {},
 ) {
 
-
     Box(
         modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
         contentAlignment = Alignment.TopCenter
     ) {
 
         when (searchViewState) {
-            is Result -> ImageListView(searchViewState.images, onImageClicked)
+            is Result -> ImageListView(searchViewState.images) { onImageClicked(it) }
             is Empty -> EmptyView(modifier = Modifier.align(Alignment.Center))
             is Error -> ErrorView(searchViewState.throwable)
         }
@@ -85,6 +116,7 @@ private fun SearchScreenContent(
         )
 
     }
+
 }
 
 @Composable
@@ -147,6 +179,9 @@ private fun ImageListView(
     onImageClicked: (Long) -> Unit,
 ) {
     val currentConfig = LocalConfiguration.current
+    var showDialog by remember { mutableStateOf(false) }
+
+
     LazyVerticalGrid(
         contentPadding = PaddingValues(top = TextFieldDefaults.MinHeight + 16.dp),
         modifier = Modifier,
@@ -156,8 +191,15 @@ private fun ImageListView(
                 ImageCard(
                     modifier = Modifier.padding(8.dp),
                     image = item,
-                    onImageClicked = onImageClicked
+                    onImageClicked = { showDialog = true }
                 )
+                ConfirmationDialog(
+                    showDialog = showDialog,
+                    onConfirm = {
+                        showDialog = false
+                        onImageClicked(item.imageId)
+                    }
+                ) { showDialog = false }
             }
         }
     )

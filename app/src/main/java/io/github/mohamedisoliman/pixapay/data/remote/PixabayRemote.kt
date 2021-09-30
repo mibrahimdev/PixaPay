@@ -14,10 +14,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-enum class ImageTypes(val key: String) {
-    PHOTO("photo")
-}
-
 interface PixabayRemote {
 
     @GET(".")
@@ -65,5 +61,9 @@ private fun loggingInterceptor(): Interceptor =
         it.level = HttpLoggingInterceptor.Level.BODY
     }
 
+
+enum class ImageTypes(val key: String) {
+    PHOTO("photo")
+}
 
 
