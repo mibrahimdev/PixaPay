@@ -3,9 +3,10 @@ package io.github.mohamedisoliman.pixapay.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.mohamedisoliman.pixapay.domain.SearchState
+import io.github.mohamedisoliman.pixapay.domain.SearchState.*
 import io.github.mohamedisoliman.pixapay.domain.SearchUsecase
 import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
-import io.github.mohamedisoliman.pixapay.ui.search.SearchState.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -27,9 +28,7 @@ class SearchImagesViewModel @Inject constructor(
 
     fun search(query: String) {
         searchUsecase(query = query)
-            .onStart { searchViewState.value = Loading }
-            .catch { searchViewState.value = Error(it) }
-            .onEach { searchViewState.value = Result(it) }
+            .onEach { searchViewState.value = it }
             .launchIn(viewModelScope)
     }
 
@@ -40,7 +39,7 @@ class SearchImagesViewModel @Inject constructor(
 
 
     fun findImage(id: Long): ImageUiModel? =
-        (searchViewState.value as? Result)?.images?.find { it.imageId == id }
+        (searchViewState.value as? Success)?.images?.find { it.imageId == id }
 
 
     fun onSearchClicked() {

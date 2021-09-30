@@ -11,7 +11,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Pets
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -28,11 +29,12 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.github.mohamedisoliman.pixapay.R
+import io.github.mohamedisoliman.pixapay.domain.SearchState
+import io.github.mohamedisoliman.pixapay.domain.SearchState.*
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 import io.github.mohamedisoliman.pixapay.ui.common.toUiModel
 import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
-import io.github.mohamedisoliman.pixapay.ui.search.SearchState.*
 
 
 @Preview
@@ -105,7 +107,7 @@ private fun SearchScreenContent(
     ) {
 
         when (searchState) {
-            is Result -> ImageListView(searchState.images) {
+            is Success -> ImageListView(searchState.images) {
                 imageId = it
                 showDialog = true
             }
