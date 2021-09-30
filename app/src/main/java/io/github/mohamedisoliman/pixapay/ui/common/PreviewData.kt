@@ -1,4 +1,4 @@
-package io.github.mohamedisoliman.pixapay.ui.search
+package io.github.mohamedisoliman.pixapay.ui.common
 
 import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
 

@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.coil.rememberCoilPainter
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
-import io.github.mohamedisoliman.pixapay.ui.search.PreviewData
+import io.github.mohamedisoliman.pixapay.ui.common.PreviewData
 
 
 @Preview
