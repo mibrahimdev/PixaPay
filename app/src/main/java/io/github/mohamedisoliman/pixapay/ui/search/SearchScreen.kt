@@ -96,6 +96,8 @@ private fun SearchScreenContent(
     searchViewState: SearchViewState = Empty,
     onImageClicked: (Long) -> Unit = {},
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+    var imageId by remember { mutableStateOf(-1L) }
 
     Box(
         modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
@@ -103,7 +105,10 @@ private fun SearchScreenContent(
     ) {
 
         when (searchViewState) {
-            is Result -> ImageListView(searchViewState.images) { onImageClicked(it) }
+            is Result -> ImageListView(searchViewState.images) {
+                imageId = it
+                showDialog = true
+            }
             is Empty -> EmptyView(modifier = Modifier.align(Alignment.Center))
             is Error -> ErrorView(searchViewState.throwable)
         }
@@ -115,6 +120,13 @@ private fun SearchScreenContent(
             isLoading = searchViewState is Loading,
         )
 
+    }
+
+    ConfirmationDialog(showDialog = showDialog, onConfirm = {
+        showDialog = false
+        onImageClicked(imageId)
+    }) {
+        showDialog = false
     }
 
 }
@@ -179,9 +191,6 @@ private fun ImageListView(
     onImageClicked: (Long) -> Unit,
 ) {
     val currentConfig = LocalConfiguration.current
-    var showDialog by remember { mutableStateOf(false) }
-
-
     LazyVerticalGrid(
         contentPadding = PaddingValues(top = TextFieldDefaults.MinHeight + 16.dp),
         modifier = Modifier,
@@ -191,15 +200,8 @@ private fun ImageListView(
                 ImageCard(
                     modifier = Modifier.padding(8.dp),
                     image = item,
-                    onImageClicked = { showDialog = true }
+                    onImageClicked = { onImageClicked(it) }
                 )
-                ConfirmationDialog(
-                    showDialog = showDialog,
-                    onConfirm = {
-                        showDialog = false
-                        onImageClicked(item.imageId)
-                    }
-                ) { showDialog = false }
             }
         }
     )
