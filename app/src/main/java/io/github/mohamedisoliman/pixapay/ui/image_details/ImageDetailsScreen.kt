@@ -51,7 +51,7 @@ fun ImageDetailsScreen(image: ImageUiModel) {
                     scaleY = maxOf(.5f, minOf(3f, scale)),
                     rotationZ = rotationState.value
                 ),
-            painter = rememberCoilPainter(request = image.url),
+            painter = rememberCoilPainter(request = image.largeImageURL),
             contentDescription = ""
         )
         ImageChips(

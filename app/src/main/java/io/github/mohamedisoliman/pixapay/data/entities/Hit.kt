@@ -2,6 +2,7 @@ package io.github.mohamedisoliman.pixapay.data.entities
 
 
 import com.squareup.moshi.Json
+import io.github.mohamedisoliman.pixapay.ui.search.ImageUiModel
 
 data class Hit(
     @Json(name = "collections")
@@ -47,5 +48,17 @@ data class Hit(
     @Json(name = "webformatURL")
     val webformatURL: String? = "",
     @Json(name = "webformatWidth")
-    val webformatWidth: Int? = 0
+    val webformatWidth: Int? = 0,
+)
+
+
+fun Hit.toImageUiModel() = ImageUiModel(
+    imageId = id?.toLong() ?: -1,
+    userName = user ?: "",
+    url = previewURL ?: "",
+    likes = likes.toString(),
+    downloads = downloads.toString(),
+    comments = comments.toString(),
+    tags = tags?.split(", ") ?: emptyList(),
+    largeImageURL = largeImageURL,
 )

@@ -20,6 +20,9 @@ fun AppNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController,
 ) {
+
+    val viewModel: SearchImagesViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = Screen.Search.route,
@@ -27,8 +30,6 @@ fun AppNavigation(
     ) {
 
         composable(Screen.Search.route) {
-
-            val viewModel: SearchImagesViewModel = viewModel()
             SearchScreen(viewModel) {
                 navController.navigate("${Screen.ImageDetails.route}/${it}")
             }
@@ -38,8 +39,8 @@ fun AppNavigation(
             route = "${Screen.ImageDetails.route}/{imageId}",
             arguments = listOf(navArgument("imageId") { type = NavType.LongType })
         ) { entry ->
+
             val id = entry.arguments?.getLong("imageId")
-            val viewModel: SearchImagesViewModel = viewModel()
             val image = id?.let { viewModel.findImage(it) }
             if (image != null) {
                 ImageDetailsScreen(image)

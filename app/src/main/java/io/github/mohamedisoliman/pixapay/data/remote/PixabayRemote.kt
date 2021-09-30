@@ -18,7 +18,7 @@ enum class ImageTypes(val key: String) {
     PHOTO("photo")
 }
 
-interface PixabayApi {
+interface PixabayRemote {
 
     @GET(".")
     suspend fun search(
@@ -32,14 +32,14 @@ interface PixabayApi {
 fun pixabayApi(
     baseUrl: HttpUrl = BuildConfig.BASE_URL.toHttpUrl(),
     client: () -> OkHttpClient = { makeOkHttpClient() },
-): PixabayApi {
+): PixabayRemote {
     val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(MoshiConverterFactory.create())
         .client(client())
         .build()
 
-    return retrofit.create(PixabayApi::class.java)
+    return retrofit.create(PixabayRemote::class.java)
 }
 
 fun makeOkHttpClient(

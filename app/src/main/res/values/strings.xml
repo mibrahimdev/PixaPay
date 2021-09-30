@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">PixaPay</string>
     <string name="search">Search</string>
-    <string name="search_screen">serach_screen</string>
+    <string name="search_screen">search_screen</string>
     <string name="image_details_screen">image_details_screen</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="empty_view_message">Try to search for funny cats!</string>
+    <string name="error_message">Something went wrong!</string>
+    <string name="network_error_message">Your network is unavailable,\n check your data or wifi and try again</string>
 </resources>

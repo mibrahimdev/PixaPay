@@ -8,50 +8,135 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import io.github.mohamedisoliman.pixapay.R
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
+import io.github.mohamedisoliman.pixapay.ui.common.toUiModel
+import io.github.mohamedisoliman.pixapay.ui.search.SearchViewState.*
 
 
 @Preview
 @Composable
 fun PreviewSearch() {
-    SearchScreenContent(PreviewData.images)
+    SearchScreenContent(searchViewState = Empty)
 }
 
 @Composable
 fun SearchScreen(viewModel: SearchImagesViewModel, onImageClicked: (Long) -> Unit = { }) {
+    val viewState by viewModel.searchViewState.collectAsState()
+    val query by viewModel.searchQueryState.collectAsState()
 
-    SearchScreenContent(viewModel.images, onImageClicked)
+    SearchScreenContent(
+        onImageClicked = onImageClicked,
+        searchText = query,
+        searchViewState = viewState,
+        onSearchChange = { viewModel.onSearchChange(it) },
+        onSearchClicked = { viewModel.onSearchClicked() }
+    )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SearchScreenContent(
-    images: List<ImageUiModel>,
+    searchText: String = "",
+    onSearchChange: (String) -> Unit = {},
+    onSearchClicked: () -> Unit = {},
+    searchViewState: SearchViewState = Empty,
     onImageClicked: (Long) -> Unit = {},
 ) {
+
+
     Box(
         modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-        ImageListView(images, onImageClicked)
-        SearchTopbar()
+
+        when (searchViewState) {
+            is Result -> ImageListView(searchViewState.images, onImageClicked)
+            is Empty -> EmptyView(modifier = Modifier.align(Alignment.Center))
+            is Error -> ErrorView(searchViewState.throwable)
+        }
+
+        SearchTopbar(
+            searchText = searchText,
+            onSearchChange = onSearchChange,
+            onSearchClicked = onSearchClicked,
+            isLoading = searchViewState is Loading,
+        )
 
     }
+}
+
+@Composable
+private fun EmptyView(modifier: Modifier) {
+    PlaceHolderView(
+        modifier = modifier,
+        icon = Icons.Outlined.AutoAwesomeMosaic,
+        stringResource(R.string.empty_view_message)
+    )
+}
+
+@Composable
+fun PlaceHolderView(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    message: String,
+    iconTint: Color = MaterialTheme.colors.secondaryVariant,
+    textColor: Color = Color.Unspecified,
+) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.Center),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                modifier = Modifier.size(120.dp),
+                imageVector = icon,
+                tint = iconTint.copy(alpha = 0.5f),
+                contentDescription = ""
+            )
+            Text(
+                text = message,
+                style = MaterialTheme.typography.subtitle1,
+                textAlign = TextAlign.Center,
+                color = textColor.copy(alpha = 0.5f)
+            )
+        }
+    }
+}
+
+@Composable
+fun ErrorView(
+    throwable: Throwable,
+) {
+    val uiModel = throwable.toUiModel()
+    PlaceHolderView(
+        icon = uiModel.errorIconId,
+        message = stringResource(id = uiModel.errorMessageId),
+        iconTint = MaterialTheme.colors.error
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -79,13 +164,18 @@ private fun ImageListView(
 
 
 @Composable
-fun SearchTopbar(modifier: Modifier = Modifier) {
-    var textState by remember { mutableStateOf("") }
+fun SearchTopbar(
+    modifier: Modifier = Modifier,
+    searchText: String = "",
+    onSearchChange: (String) -> Unit = {},
+    onSearchClicked: () -> Unit = {},
+    isLoading: Boolean,
+) {
     TextField(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 8.dp),
-        value = textState,
+        value = searchText,
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = MaterialTheme.colors.surface,
             cursorColor = MaterialTheme.colors.onSurface,
@@ -94,22 +184,31 @@ fun SearchTopbar(modifier: Modifier = Modifier) {
             unfocusedIndicatorColor = Color.Transparent
         ),
         onValueChange = {
-            textState = it
+            onSearchChange(it)
         },
         shape = RoundedCornerShape(8.dp),
         singleLine = true,
-        trailingIcon = {
-            IconButton(onClick = {
-                // TODO:
-            }) {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    tint = MaterialTheme.colors.onSurface,
-                    contentDescription = ""
-                )
-            }
-        }
+        trailingIcon = { TrailingIcon(isLoading, onSearchClicked) },
+        keyboardActions = KeyboardActions(onDone = { onSearchClicked() })
     )
+}
+
+@Composable
+private fun TrailingIcon(isLoading: Boolean, onSearchClicked: () -> Unit) {
+    if (isLoading) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(20.dp),
+            strokeWidth = 2.dp
+        )
+    } else {
+        IconButton(onClick = { onSearchClicked() }) {
+            Icon(
+                imageVector = Icons.Outlined.Search,
+                tint = MaterialTheme.colors.onSurface,
+                contentDescription = ""
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalCoilApi::class)

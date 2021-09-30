@@ -13,7 +13,7 @@ import retrofit2.HttpException
 
 
 @ExperimentalCoroutinesApi
-class PixabayApiTest {
+class PixabayRemoteTest {
 
 
     @get:Rule
