@@ -1,0 +1,78 @@
+package io.github.mohamedisoliman.pixapay.domain
+
+import io.github.mohamedisoliman.pixapay.data.ImagesRepositoryContract
+import io.github.mohamedisoliman.pixapay.data.entities.Hit
+import io.mockk.mockk
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
+import org.junit.Test
+import java.net.UnknownHostException
+
+class SearchUsecaseTest {
+
+
+    @Test
+    fun `search() Then start Loading`() = runBlocking {
+        val hit = mockk<Hit>()
+        val repository = mockRepository(flowOf(listOf(hit, hit, hit)))
+
+        val result = SearchUsecase(repository).invoke("flowers").first()
+
+        assert((result is SearchState.Loading))
+    }
+
+    @Test
+    fun `search() with Exception THEN return Error State`() = runBlocking {
+        val repository = mockRepository(flow {
+            throw UnknownHostException()
+        })
+
+        val result = SearchUsecase(repository).invoke("flowers").last()
+
+        assert((result is SearchState.Error) && result.throwable is UnknownHostException)
+    }
+
+
+    @Test
+    fun `search() with empty Results THEN return Empty state`() = runBlocking {
+        val repository = mockRepository(flowOf(emptyList()))
+
+        val result = SearchUsecase(repository).invoke("flowers").last()
+
+        assert((result is SearchState.Empty))
+    }
+
+    @Test
+    fun `search() with None empty Results THEN return Success state`() = runBlocking {
+        val repository = mockRepository(flow {
+            emit(listOf(Hit(), Hit(), Hit()))
+        })
+
+
+        val result = SearchUsecase(repository).invoke("flowers").last()
+
+        assert((result is SearchState.Success) && result.images.size == 3)
+    }
+
+
+    @Test
+    fun `search() with None empty Results THEN Loading then Success`() = runBlocking {
+        val repository = mockRepository(flow {
+            emit(listOf(Hit(), Hit(), Hit()))
+        })
+
+
+        val result = SearchUsecase(repository).invoke("flowers").toList()
+        assert(result.first() is SearchState.Loading)
+        assert(result.drop(1).first() is SearchState.Success)
+        assert(result.count() == 2)
+    }
+
+
+    private fun mockRepository(flowReturn: Flow<List<Hit>>) =
+        object : ImagesRepositoryContract {
+            override fun search(query: String): Flow<List<Hit>> = flowReturn
+        }
+
+
+}
