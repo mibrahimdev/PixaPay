@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.github.mohamedisoliman.pixapay.ui.search.IconChip
-import io.github.mohamedisoliman.pixapay.ui.search.ImageUiModel
+import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
 
 
 @Composable
@@ -53,22 +53,35 @@ fun ImageChips(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconChip(icon = Icons.Outlined.Person, image.userName)
-                if (showExtraChips) {
-                    IconChip(icon = Icons.Outlined.ThumbUp, image.likes)
-                    IconChip(icon = Icons.Outlined.Download, image.downloads)
-                    IconChip(icon = Icons.Outlined.Comment, image.comments)
-                }
+                ExtraShips(showExtraChips, image)
             }
-            LazyRow(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                content = {
-                    itemsIndexed(image.tags) { _, item ->
-                        TagChip(tagName = item)
-                    }
-                }
-            )
+            TagsList(image.tags)
         }
+    }
+}
+
+@Composable
+private fun TagsList(tags: List<String>) {
+    LazyRow(
+        modifier = Modifier,
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        content = {
+            itemsIndexed(tags) { _, item ->
+                TagChip(tagName = item)
+            }
+        }
+    )
+}
+
+@Composable
+private fun ExtraShips(
+    showExtraChips: Boolean,
+    image: ImageUiModel,
+) {
+    if (showExtraChips) {
+        IconChip(icon = Icons.Outlined.ThumbUp, image.likes)
+        IconChip(icon = Icons.Outlined.Download, image.downloads)
+        IconChip(icon = Icons.Outlined.Comment, image.comments)
     }
 }
 

@@ -31,6 +31,7 @@ import io.github.mohamedisoliman.pixapay.R
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 import io.github.mohamedisoliman.pixapay.ui.common.toUiModel
+import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
 import io.github.mohamedisoliman.pixapay.ui.search.SearchViewState.*
 
 
@@ -90,7 +91,7 @@ private fun SearchScreenContent(
 private fun EmptyView(modifier: Modifier) {
     PlaceHolderView(
         modifier = modifier,
-        icon = Icons.Outlined.AutoAwesomeMosaic,
+        icon = Icons.Outlined.Pets,
         stringResource(R.string.empty_view_message)
     )
 }

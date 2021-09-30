@@ -1,10 +1,9 @@
 package io.github.mohamedisoliman.pixapay.ui.common
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material.icons.outlined.WifiOff
-import androidx.compose.ui.graphics.vector.ImageVector
 import io.github.mohamedisoliman.pixapay.R
+import io.github.mohamedisoliman.pixapay.ui.models.ErrorUiModel
 import java.net.UnknownHostException
 
 fun Throwable.toUiModel(): ErrorUiModel = when (this) {
@@ -14,8 +13,3 @@ fun Throwable.toUiModel(): ErrorUiModel = when (this) {
     )
     else -> ErrorUiModel()
 }
-
-data class ErrorUiModel(
-    val errorMessageId: Int = R.string.error_message,
-    val errorIconId: ImageVector = Icons.Outlined.Error,
-)

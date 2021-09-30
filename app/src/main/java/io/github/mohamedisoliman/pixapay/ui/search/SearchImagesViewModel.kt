@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import io.github.mohamedisoliman.pixapay.data.ImagesRepository
 import io.github.mohamedisoliman.pixapay.data.remote.pixabayApi
 import io.github.mohamedisoliman.pixapay.domain.SearchUsecase
+import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
 import io.github.mohamedisoliman.pixapay.ui.search.SearchViewState.*
 import kotlinx.coroutines.flow.*
 
@@ -27,9 +28,8 @@ class SearchImagesViewModel : ViewModel() {
         searchUsecase(query = query)
             .onStart { searchViewState.value = Loading }
             .catch { searchViewState.value = Error(it) }
-            .onEach {
-                searchViewState.value = Result(it)
-            }.launchIn(viewModelScope)
+            .onEach { searchViewState.value = Result(it) }
+            .launchIn(viewModelScope)
     }
 
 

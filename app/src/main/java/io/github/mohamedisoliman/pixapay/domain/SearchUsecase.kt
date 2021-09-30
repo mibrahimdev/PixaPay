@@ -2,7 +2,7 @@ package io.github.mohamedisoliman.pixapay.domain
 
 import io.github.mohamedisoliman.pixapay.data.ImagesRepositoryContract
 import io.github.mohamedisoliman.pixapay.data.entities.toImageUiModel
-import io.github.mohamedisoliman.pixapay.ui.search.ImageUiModel
+import io.github.mohamedisoliman.pixapay.ui.models.ImageUiModel
 import kotlinx.coroutines.flow.*
 
 class SearchUsecase(
