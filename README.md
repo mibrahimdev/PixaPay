@@ -18,7 +18,7 @@
 - [Timber](https://github.com/JakeWharton/timber) - Logging.
 - [Mockk](https://github.com/mockk/mockk) Kotlin Testing.
 
-## Architecture - Clean Architecture + Offline first
+## Clean Architecture + Offline first
 - Data (database, API and preferences code)
 - Domain (business logic)
 - UI (for presentation logic, using MVVM with finite state machine pattern)
