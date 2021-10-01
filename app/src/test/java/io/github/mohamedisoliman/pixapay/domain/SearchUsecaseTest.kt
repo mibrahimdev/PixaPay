@@ -1,7 +1,7 @@
 package io.github.mohamedisoliman.pixapay.domain
 
 import io.github.mohamedisoliman.pixapay.data.ImagesRepositoryContract
-import io.github.mohamedisoliman.pixapay.data.entities.Hit
+import io.github.mohamedisoliman.pixapay.data.entities.PixabayImage
 import io.mockk.mockk
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
@@ -13,7 +13,7 @@ class SearchUsecaseTest {
 
     @Test
     fun `search() Then start Loading`() = runBlocking {
-        val hit = mockk<Hit>()
+        val hit = mockk<PixabayImage>()
         val repository = mockRepository(flowOf(listOf(hit, hit, hit)))
 
         val result = SearchUsecase(repository).invoke("flowers").first()
@@ -45,7 +45,7 @@ class SearchUsecaseTest {
     @Test
     fun `search() with None empty Results THEN return Success state`() = runBlocking {
         val repository = mockRepository(flow {
-            emit(listOf(Hit(), Hit(), Hit()))
+            emit(listOf(PixabayImage(), PixabayImage(), PixabayImage()))
         })
 
 
@@ -58,7 +58,7 @@ class SearchUsecaseTest {
     @Test
     fun `search() with None empty Results THEN Loading then Success`() = runBlocking {
         val repository = mockRepository(flow {
-            emit(listOf(Hit(), Hit(), Hit()))
+            emit(listOf(PixabayImage(), PixabayImage(), PixabayImage()))
         })
 
 
@@ -69,9 +69,9 @@ class SearchUsecaseTest {
     }
 
 
-    private fun mockRepository(flowReturn: Flow<List<Hit>>) =
+    private fun mockRepository(flowReturn: Flow<List<PixabayImage>>) =
         object : ImagesRepositoryContract {
-            override fun search(query: String): Flow<List<Hit>> = flowReturn
+            override fun search(query: String): Flow<List<PixabayImage>> = flowReturn
         }
 
 

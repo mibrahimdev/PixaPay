@@ -1,58 +1,61 @@
 package io.github.mohamedisoliman.pixapay.data.entities
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
-import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
 
-data class Hit(
-    @Json(name = "collections")
-    val collections: Int? = 0,
-    @Json(name = "comments")
-    val comments: Int? = 0,
-    @Json(name = "downloads")
-    val downloads: Int? = 0,
-    @Json(name = "id")
+@Entity
+data class PixabayImage(
+    @PrimaryKey
+    @field:Json(name = "id")
     val id: Int? = 0,
-    @Json(name = "imageHeight")
+    @field:Json(name = "collections")
+    val collections: Int? = 0,
+    @field:Json(name = "comments")
+    val comments: Int? = 0,
+    @field:Json(name = "downloads")
+    val downloads: Int? = 0,
+    @field:Json(name = "imageHeight")
     val imageHeight: Int? = 0,
-    @Json(name = "imageSize")
+    @field:Json(name = "imageSize")
     val imageSize: Int? = 0,
-    @Json(name = "imageWidth")
+    @field:Json(name = "imageWidth")
     val imageWidth: Int? = 0,
-    @Json(name = "largeImageURL")
+    @field:Json(name = "largeImageURL")
     val largeImageURL: String? = "",
-    @Json(name = "likes")
+    @field:Json(name = "likes")
     val likes: Int? = 0,
-    @Json(name = "pageURL")
+    @field:Json(name = "pageURL")
     val pageURL: String? = "",
-    @Json(name = "previewHeight")
+    @field:Json(name = "previewHeight")
     val previewHeight: Int? = 0,
-    @Json(name = "previewURL")
+    @field:Json(name = "previewURL")
     val previewURL: String? = "",
-    @Json(name = "previewWidth")
+    @field:Json(name = "previewWidth")
     val previewWidth: Int? = 0,
-    @Json(name = "tags")
+    @field:Json(name = "tags")
     val tags: String? = "",
-    @Json(name = "type")
+    @field:Json(name = "type")
     val type: String? = "",
-    @Json(name = "user")
+    @field:Json(name = "user")
     val user: String? = "",
-    @Json(name = "user_id")
+    @field:Json(name = "user_id")
     val userId: Int? = 0,
-    @Json(name = "userImageURL")
+    @field:Json(name = "userImageURL")
     val userImageURL: String? = "",
-    @Json(name = "views")
+    @field:Json(name = "views")
     val views: Int? = 0,
-    @Json(name = "webformatHeight")
+    @field:Json(name = "webformatHeight")
     val webformatHeight: Int? = 0,
-    @Json(name = "webformatURL")
+    @field:Json(name = "webformatURL")
     val webformatURL: String? = "",
-    @Json(name = "webformatWidth")
+    @field:Json(name = "webformatWidth")
     val webformatWidth: Int? = 0,
 )
 
 
-fun Hit.toImageUiModel() = ImageUiModel(
+fun PixabayImage.toImageUiModel() = ImageModel(
     imageId = id?.toLong() ?: -1,
     userName = user ?: "",
     url = previewURL ?: "",

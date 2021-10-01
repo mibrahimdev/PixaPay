@@ -3,7 +3,7 @@ package io.github.mohamedisoliman.pixapay.ui.common
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -16,15 +16,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.github.mohamedisoliman.pixapay.R
 import io.github.mohamedisoliman.pixapay.ui.search.IconChip
-import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
+import io.github.mohamedisoliman.pixapay.data.entities.ImageModel
 
 
 @Composable
 fun ImageChips(
     modifier: Modifier = Modifier,
-    image: ImageUiModel,
+    image: ImageModel,
     showExtraChips: Boolean = false,
 ) {
 
@@ -66,9 +68,7 @@ private fun TagsList(tags: List<String>) {
         modifier = Modifier,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         content = {
-            itemsIndexed(tags) { _, item ->
-                TagChip(tagName = item)
-            }
+            items(tags) { TagChip(tagName = it) }
         }
     )
 }
@@ -76,7 +76,7 @@ private fun TagsList(tags: List<String>) {
 @Composable
 private fun ExtraShips(
     showExtraChips: Boolean,
-    image: ImageUiModel,
+    image: ImageModel,
 ) {
     if (showExtraChips) {
         IconChip(icon = Icons.Outlined.ThumbUp, image.likes)
@@ -91,7 +91,7 @@ fun TagChip(
     tagName: String,
 ) {
     Text(
-        text = tagName,
+        text = stringResource(R.string.tag_prfix) + tagName,
         style = MaterialTheme.typography.caption.copy(color = Color.White)
     )
 }

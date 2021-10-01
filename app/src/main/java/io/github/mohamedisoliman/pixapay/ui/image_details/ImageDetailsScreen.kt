@@ -15,7 +15,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.coil.rememberCoilPainter
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
-import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
+import io.github.mohamedisoliman.pixapay.data.entities.ImageModel
 import io.github.mohamedisoliman.pixapay.ui.common.PreviewData
 
 
@@ -27,7 +27,7 @@ fun PreviewImageDetails() {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ImageDetailsScreen(image: ImageUiModel) {
+fun ImageDetailsScreen(image: ImageModel) {
 
     var scale by remember { mutableStateOf(1f) }
     val rotationState = remember { mutableStateOf(1f) }

@@ -1,6 +1,6 @@
-package io.github.mohamedisoliman.pixapay.ui.uiModels
+package io.github.mohamedisoliman.pixapay.data.entities
 
-data class ImageUiModel(
+data class ImageModel(
     val imageId: Long = -1,
     val userName: String,
     val url: String,

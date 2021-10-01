@@ -34,7 +34,7 @@ import io.github.mohamedisoliman.pixapay.domain.SearchState.*
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 import io.github.mohamedisoliman.pixapay.ui.common.toUiModel
-import io.github.mohamedisoliman.pixapay.ui.uiModels.ImageUiModel
+import io.github.mohamedisoliman.pixapay.data.entities.ImageModel
 
 
 @Preview
@@ -189,7 +189,7 @@ fun ErrorView(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ImageListView(
-    images: List<ImageUiModel>,
+    images: List<ImageModel>,
     onImageClicked: (Long) -> Unit,
 ) {
     val currentConfig = LocalConfiguration.current
@@ -262,7 +262,7 @@ private fun TrailingIcon(isLoading: Boolean, onSearchClicked: () -> Unit) {
 @Composable
 fun ImageCard(
     modifier: Modifier = Modifier,
-    image: ImageUiModel,
+    image: ImageModel,
     showExtraChips: Boolean = false,
     onImageClicked: (Long) -> Unit,
 ) {

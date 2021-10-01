@@ -1,7 +1,7 @@
 package io.github.mohamedisoliman.pixapay.data.remote
 
 import io.github.mohamedisoliman.pixapay.BuildConfig
-import io.github.mohamedisoliman.pixapay.data.entities.PixabaySearchDto
+import io.github.mohamedisoliman.pixapay.data.entities.PixabaySearchResponse
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
@@ -14,13 +14,13 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-interface PixabayRemote {
+interface RemotePixabayContract {
 
     @GET(".")
     suspend fun search(
         @Query("q") query: String,
         @Query("image_type") imageType: String = ImageTypes.PHOTO.key,
-    ): PixabaySearchDto
+    ): PixabaySearchResponse
 
 }
 
@@ -28,14 +28,14 @@ interface PixabayRemote {
 fun pixabayApi(
     baseUrl: HttpUrl = BuildConfig.BASE_URL.toHttpUrl(),
     client: () -> OkHttpClient = { makeOkHttpClient() },
-): PixabayRemote {
+): RemotePixabayContract {
     val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(MoshiConverterFactory.create())
         .client(client())
         .build()
 
-    return retrofit.create(PixabayRemote::class.java)
+    return retrofit.create(RemotePixabayContract::class.java)
 }
 
 fun makeOkHttpClient(
