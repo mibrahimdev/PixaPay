@@ -55,7 +55,7 @@ data class PixabayImage(
 )
 
 
-fun PixabayImage.toImageUiModel() = ImageModel(
+fun PixabayImage.toImageModel() = ImageModel(
     imageId = id?.toLong() ?: -1,
     userName = user ?: "",
     url = previewURL ?: "",

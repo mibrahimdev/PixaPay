@@ -1,7 +1,7 @@
 package io.github.mohamedisoliman.pixapay.domain
 
 import io.github.mohamedisoliman.pixapay.data.ImagesRepositoryContract
-import io.github.mohamedisoliman.pixapay.data.entities.toImageUiModel
+import io.github.mohamedisoliman.pixapay.data.entities.toImageModel
 import io.github.mohamedisoliman.pixapay.data.entities.ImageModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -12,7 +12,7 @@ class SearchUsecase @Inject constructor(
 
     operator fun invoke(query: String): Flow<SearchState> {
         return imagesRepository.search(query)
-            .map { list -> list.map { it.toImageUiModel() } }
+            .map { list -> list.map { it.toImageModel() } }
             .map { if (it.isEmpty()) SearchState.Empty else SearchState.Success(it) }
             .onStart { emit(SearchState.Loading) }
             .catch { emit(SearchState.Error(it)) }
