@@ -1,4 +1,4 @@
-package io.github.mohamedisoliman.pixapay.ui.uiModels
+package io.github.mohamedisoliman.pixapay.ui.common
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Error

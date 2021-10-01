@@ -3,7 +3,6 @@ package io.github.mohamedisoliman.pixapay.ui.common
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WifiOff
 import io.github.mohamedisoliman.pixapay.R
-import io.github.mohamedisoliman.pixapay.ui.uiModels.ErrorUiModel
 import java.net.UnknownHostException
 
 fun Throwable.toUiModel(): ErrorUiModel = when (this) {
