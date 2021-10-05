@@ -11,12 +11,12 @@
 - [Navigation component](https://developer.android.com/guide/navigation) - Navigaton with Compose.
 - [Material Design](https://material.io/blog/android-material-theme-color)  - Design System.
 - [Coil](https://github.com/coil-kt) - Image laoding.
-- [Retrofit & OkHttp](https://github.com/square/retrofit) Networking.
-- [Room](https://developer.android.com/jetpack/androidx/releases/room) Sqlite database.
+- [Retrofit & OkHttp](https://github.com/square/retrofit) - Networking.
+- [Room](https://developer.android.com/jetpack/androidx/releases/room) - Sqlite database.
 - [Hilt](http://google.github.io/hilt/) - Dependency injection.
 - [Kotlin Flows](https://kotlinlang.org/docs/reference/coroutines/flow.html) - Reactive programming.
 - [Timber](https://github.com/JakeWharton/timber) - Logging.
-- [Mockk](https://github.com/mockk/mockk) Kotlin Testing.
+- [Mockk](https://github.com/mockk/mockk) - Kotlin Testing.
 
 ## Clean Architecture + Offline first
 - Data (database, API and preferences code)
