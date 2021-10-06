@@ -18,8 +18,10 @@ class SearchImagesViewModel @Inject constructor(
     private var _searchViewState = MutableStateFlow<SearchState>(Empty)
     val searchViewState: StateFlow<SearchState> = _searchViewState
 
-    private var _searchQueryState = MutableStateFlow("fruits")
-    val searchQueryState: StateFlow<String> = _searchQueryState
+    private var _queryState = MutableStateFlow("fruits")
+    val queryState: StateFlow<String> = _queryState
+
+    lateinit var navigateToDetails: (Long) -> Unit
 
 
     init {
@@ -34,7 +36,7 @@ class SearchImagesViewModel @Inject constructor(
 
 
     fun onSearchChange(searchText: String) {
-        _searchQueryState.value = searchText
+        _queryState.value = searchText
     }
 
 
@@ -43,7 +45,7 @@ class SearchImagesViewModel @Inject constructor(
 
 
     fun onSearchClicked() {
-        search(_searchQueryState.value)
+        search(_queryState.value)
     }
 
 }
