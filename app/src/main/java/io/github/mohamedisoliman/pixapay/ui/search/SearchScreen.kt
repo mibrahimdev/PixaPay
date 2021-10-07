@@ -64,7 +64,7 @@ fun SearchScreen(viewModel: SearchImagesViewModel) {
 
         },
         onSearchChange = { viewModel.onSearchQueryChange(it) },
-        onSearchClicked = { viewModel.onSearchClicked(viewState.searchText ?: "") },
+        onSearchClicked = { viewModel.onSearchClicked() },
         isLoading = viewState.isLoading
     )
 

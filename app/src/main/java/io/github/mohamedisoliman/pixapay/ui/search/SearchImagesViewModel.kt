@@ -25,7 +25,7 @@ class SearchImagesViewModel @Inject constructor(
 
     init {
         subscribeToEvents()
-        onSearchClicked("fruits")
+        onSearchClicked()
     }
 
 
@@ -42,8 +42,8 @@ class SearchImagesViewModel @Inject constructor(
     }
 
 
-    fun onSearchClicked(query: String) {
-        viewModelScope.launch { _searchClick.emit(query) }
+    fun onSearchClicked() {
+        viewModelScope.launch { _searchClick.emit(_queryState.value) }
     }
 
 
