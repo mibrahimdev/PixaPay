@@ -12,13 +12,13 @@ class SearchUsecaseTest {
 
 
     @Test
-    fun `search() Then start Loading`() = runBlocking {
+    fun `search() THEN start with Loading state`() = runBlocking {
         val hit = mockk<PixabayImage>()
         val repository = mockRepository(flowOf(listOf(hit, hit, hit)))
 
         val result = SearchUsecase(repository).invoke("flowers").first()
 
-        assert((result is SearchState.Loading))
+        assert(result is SearchState.Loading)
     }
 
     @Test
@@ -39,7 +39,7 @@ class SearchUsecaseTest {
 
         val result = SearchUsecase(repository).invoke("flowers").last()
 
-        assert((result is SearchState.Empty))
+        assert((result is SearchState.EmptyResult))
     }
 
     @Test
@@ -51,7 +51,7 @@ class SearchUsecaseTest {
 
         val result = SearchUsecase(repository).invoke("flowers").last()
 
-        assert((result is SearchState.Success) && result.images.size == 3)
+        assert((result is SearchState.Success) && result.result?.size == 3)
     }
 
 

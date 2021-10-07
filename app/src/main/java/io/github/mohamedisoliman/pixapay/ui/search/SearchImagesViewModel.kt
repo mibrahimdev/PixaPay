@@ -1,51 +1,44 @@
 package io.github.mohamedisoliman.pixapay.ui.search
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.mohamedisoliman.pixapay.domain.SearchState
-import io.github.mohamedisoliman.pixapay.domain.SearchState.*
-import io.github.mohamedisoliman.pixapay.domain.SearchUsecase
+import io.github.mohamedisoliman.pixapay.BaseViewModel
 import io.github.mohamedisoliman.pixapay.data.entities.ImageModel
-import kotlinx.coroutines.flow.*
+import io.github.mohamedisoliman.pixapay.domain.SearchState
+import io.github.mohamedisoliman.pixapay.domain.SearchState.EmptyResult
+import io.github.mohamedisoliman.pixapay.domain.SearchState.Loading
+import io.github.mohamedisoliman.pixapay.domain.SearchUsecase
+import io.github.mohamedisoliman.pixapay.ui.search.SearchScreenEvent.SearchClicked
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchImagesViewModel @Inject constructor(
-    val searchUsecase: SearchUsecase,
-) : ViewModel() {
+    private val searchUsecase: SearchUsecase,
+) : BaseViewModel<SearchScreenEvent, SearchState>(EmptyResult) {
 
-    private var _searchViewState = MutableStateFlow<SearchState>(Empty)
-    val searchViewState: StateFlow<SearchState> = _searchViewState
-
-    private var _queryState = MutableStateFlow("fruits")
-    val queryState: StateFlow<String> = _queryState
+    private val _queryState = MutableStateFlow("fruits")
+    val query = _queryState.asStateFlow()
 
     lateinit var navigateToDetails: (Long) -> Unit
 
-
     init {
-        onSearchClicked()
-    }
-
-    fun search(query: String) {
-        searchUsecase(query = query)
-            .onEach { _searchViewState.value = it }
-            .launchIn(viewModelScope)
+        emitEvent(SearchClicked(query.value))
     }
 
 
-    fun onSearchChange(searchText: String) {
-        _queryState.value = searchText
+    fun onSearchQueryChange(query: String) {
+        _queryState.value = query
     }
 
-
-    fun findImage(id: Long): ImageModel? =
-        (_searchViewState.value as? Success)?.images?.find { it.imageId == id }
+    fun findImage(id: Long): ImageModel? = states.value.result?.find { it.imageId == id }
 
 
-    fun onSearchClicked() {
-        search(_queryState.value)
+    override fun SearchScreenEvent.eventToUsecase(): Flow<SearchState> {
+        return when (this) {
+            is SearchClicked -> searchUsecase(this.query)
+        }
     }
-
 }

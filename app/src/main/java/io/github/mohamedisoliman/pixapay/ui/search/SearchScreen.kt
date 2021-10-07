@@ -35,6 +35,7 @@ import io.github.mohamedisoliman.pixapay.domain.SearchState
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 import io.github.mohamedisoliman.pixapay.ui.common.toUiModel
+import io.github.mohamedisoliman.pixapay.ui.search.SearchScreenEvent.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
@@ -49,27 +50,25 @@ fun PreviewSearch() {
 @ExperimentalCoroutinesApi
 @Composable
 fun SearchScreen(viewModel: SearchImagesViewModel) {
-    val viewState by viewModel.searchViewState.collectAsState()
-    val query by viewModel.queryState.collectAsState()
-    var isLoading by remember { mutableStateOf(false) }
+    val viewState by viewModel.states.collectAsState()
+    val query by viewModel.query.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var imageId by remember { mutableStateOf(-1L) }
+
 
     SearchScreenContent(
         searchText = query,
         searchMainView = {
-            viewState.StateToMainView(isLoading = {
-                isLoading = it
-            }, showDialog = {
+            viewState.StateToMainView(showDialog = {
                 showDialog = it
             }, imageId = {
                 imageId = it
             })
 
         },
-        onSearchChange = { viewModel.onSearchChange(it) },
-        onSearchClicked = { viewModel.onSearchClicked() },
-        isLoading = isLoading
+        onSearchChange = { viewModel.onSearchQueryChange(it) },
+        onSearchClicked = { viewModel.emitEvent(SearchClicked(query)) },
+        isLoading = viewState.isLoading
     )
 
     ConfirmationDialog(showDialog = showDialog, onConfirm = {
@@ -84,19 +83,17 @@ fun SearchScreen(viewModel: SearchImagesViewModel) {
 private fun UiState.StateToMainView(
     imageId: (Long) -> Unit,
     showDialog: (Boolean) -> Unit,
-    isLoading: (Boolean) -> Unit,
 ) {
     when (this) {
-        is SearchState.Empty -> EmptyView()
-        is SearchState.Error -> ErrorView(this.throwable)
-        is SearchState.Success -> ImageListView(this.images) {
-            imageId(it)
-            showDialog(true)
+        is SearchState.EmptyResult -> EmptyView()
+        is SearchState.Error -> this.throwable?.let { ErrorView(it) }
+        is SearchState.Success -> this.result?.let { list ->
+            ImageListView(list) {
+                imageId(it)
+                showDialog(true)
+            }
         }
-        is SearchState.Loading -> isLoading(true)
         else -> { }
-    }.also {
-        isLoading(this is SearchState.Loading)
     }
 }
 
