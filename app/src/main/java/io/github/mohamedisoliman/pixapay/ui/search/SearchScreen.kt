@@ -31,11 +31,10 @@ import coil.compose.rememberImagePainter
 import io.github.mohamedisoliman.pixapay.R
 import io.github.mohamedisoliman.pixapay.UiState
 import io.github.mohamedisoliman.pixapay.data.entities.ImageModel
-import io.github.mohamedisoliman.pixapay.domain.SearchState
+import io.github.mohamedisoliman.pixapay.domain.search.SearchState
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 import io.github.mohamedisoliman.pixapay.ui.common.toUiModel
-import io.github.mohamedisoliman.pixapay.ui.search.SearchScreenEvent.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
@@ -51,13 +50,11 @@ fun PreviewSearch() {
 @Composable
 fun SearchScreen(viewModel: SearchImagesViewModel) {
     val viewState by viewModel.states.collectAsState()
-    val query by viewModel.query.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var imageId by remember { mutableStateOf(-1L) }
 
-
     SearchScreenContent(
-        searchText = query,
+        searchText = viewModel.query.value,
         searchMainView = {
             viewState.StateToMainView(showDialog = {
                 showDialog = it
@@ -67,7 +64,7 @@ fun SearchScreen(viewModel: SearchImagesViewModel) {
 
         },
         onSearchChange = { viewModel.onSearchQueryChange(it) },
-        onSearchClicked = { viewModel.emitEvent(SearchClicked(query)) },
+        onSearchClicked = { viewModel.onSearchClicked(viewState.searchText ?: "") },
         isLoading = viewState.isLoading
     )
 
@@ -93,7 +90,8 @@ private fun UiState.StateToMainView(
                 showDialog(true)
             }
         }
-        else -> { }
+        else -> {
+        }
     }
 }
 
