@@ -3,6 +3,7 @@ package io.github.mohamedisoliman.pixapay.data
 import io.github.mohamedisoliman.pixapay.data.entities.PixabayImage
 import io.github.mohamedisoliman.pixapay.data.local.LocalPixabayStoreContract
 import io.github.mohamedisoliman.pixapay.data.remote.RemotePixabayContract
+import io.github.mohamedisoliman.pixapay.domain.search.ImagesRepositoryContract
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject

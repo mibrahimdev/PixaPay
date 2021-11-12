@@ -14,8 +14,10 @@ import io.github.mohamedisoliman.pixapay.R
 import io.github.mohamedisoliman.pixapay.ui.image_details.ImageDetailsScreen
 import io.github.mohamedisoliman.pixapay.ui.search.SearchImagesViewModel
 import io.github.mohamedisoliman.pixapay.ui.search.SearchScreen
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
@@ -23,6 +25,9 @@ fun AppNavigation(
 ) {
 
     val viewModel: SearchImagesViewModel = hiltViewModel()
+    viewModel.navigateToDetails = {
+        navController.navigate("${Screen.ImageDetails.route}/${it}")
+    }
 
     NavHost(
         navController = navController,
@@ -31,9 +36,7 @@ fun AppNavigation(
     ) {
 
         composable(Screen.Search.route) {
-            SearchScreen(viewModel) {
-                navController.navigate("${Screen.ImageDetails.route}/${it}")
-            }
+            SearchScreen(viewModel)
         }
 
         composable(

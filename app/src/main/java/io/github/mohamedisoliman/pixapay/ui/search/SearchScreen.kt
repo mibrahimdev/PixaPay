@@ -29,41 +29,79 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.github.mohamedisoliman.pixapay.R
-import io.github.mohamedisoliman.pixapay.domain.SearchState
-import io.github.mohamedisoliman.pixapay.domain.SearchState.*
+import io.github.mohamedisoliman.pixapay.UiState
+import io.github.mohamedisoliman.pixapay.data.entities.ImageModel
+import io.github.mohamedisoliman.pixapay.domain.search.SearchState
 import io.github.mohamedisoliman.pixapay.ui.common.ImageChips
 import io.github.mohamedisoliman.pixapay.ui.common.isPortrait
 import io.github.mohamedisoliman.pixapay.ui.common.toUiModel
-import io.github.mohamedisoliman.pixapay.data.entities.ImageModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
 
 @Preview
 @Composable
 fun PreviewSearch() {
-    SearchScreenContent(searchState = Empty)
+    SearchScreenContent()
+}
+
+@OptIn(FlowPreview::class)
+@ExperimentalCoroutinesApi
+@Composable
+fun SearchScreen(viewModel: SearchImagesViewModel) {
+    val viewState by viewModel.states.collectAsState()
+    var showDialog by remember { mutableStateOf(false) }
+    var imageId by remember { mutableStateOf(-1L) }
+
+    SearchScreenContent(
+        searchText = viewModel.query.value,
+        searchMainView = {
+            viewState.StateToMainView(showDialog = {
+                showDialog = it
+            }, imageId = {
+                imageId = it
+            })
+
+        },
+        onSearchChange = { viewModel.onSearchQueryChange(it) },
+        onSearchClicked = { viewModel.onSearchClicked() },
+        isLoading = viewState.isLoading
+    )
+
+    ConfirmationDialog(showDialog = showDialog, onConfirm = {
+        showDialog = false
+        viewModel.navigateToDetails(imageId)
+    }) {
+        showDialog = false
+    }
 }
 
 @Composable
-fun SearchScreen(viewModel: SearchImagesViewModel, onNavigateClicked: (Long) -> Unit = { }) {
-    val viewState by viewModel.searchViewState.collectAsState()
-    val query by viewModel.searchQueryState.collectAsState()
-
-    SearchScreenContent(
-        onImageClicked = onNavigateClicked,
-        searchText = query,
-        searchState = viewState,
-        onSearchChange = { viewModel.onSearchChange(it) },
-        onSearchClicked = { viewModel.onSearchClicked() }
-    )
+private fun UiState.StateToMainView(
+    imageId: (Long) -> Unit,
+    showDialog: (Boolean) -> Unit,
+) {
+    when (this) {
+        is SearchState.EmptyResult -> EmptyView()
+        is SearchState.Error -> this.throwable?.let { ErrorView(it) }
+        is SearchState.Success -> this.result?.let { list ->
+            ImageListView(list) {
+                imageId(it)
+                showDialog(true)
+            }
+        }
+        else -> {
+        }
+    }
 }
 
 @Composable
 fun ConfirmationDialog(
-    showDialog: Boolean,
+    showDialog: Boolean = false,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    if (showDialog) {
+    if (showDialog)
         AlertDialog(
             modifier = Modifier.fillMaxWidth(),
             title = { Text(stringResource(R.string.dialog_title_open_image_details)) },
@@ -86,55 +124,37 @@ fun ConfirmationDialog(
                 }
             }
         )
-    }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SearchScreenContent(
     searchText: String = "",
+    isLoading: Boolean = false,
     onSearchChange: (String) -> Unit = {},
     onSearchClicked: () -> Unit = {},
-    searchState: SearchState = Empty,
-    onImageClicked: (Long) -> Unit = {},
+    searchMainView: @Composable () -> Unit = {},
 ) {
-    var showDialog by remember { mutableStateOf(false) }
-    var imageId by remember { mutableStateOf(-1L) }
-
     Box(
         modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
         contentAlignment = Alignment.TopCenter
     ) {
 
-        when (searchState) {
-            is Success -> ImageListView(searchState.images) {
-                imageId = it
-                showDialog = true
-            }
-            is Empty -> EmptyView(modifier = Modifier.align(Alignment.Center))
-            is Error -> ErrorView(searchState.throwable)
-        }
+        searchMainView()
 
         SearchTopbar(
             searchText = searchText,
             onSearchChange = onSearchChange,
             onSearchClicked = onSearchClicked,
-            isLoading = searchState is Loading,
+            isLoading = isLoading,
         )
 
-    }
-
-    ConfirmationDialog(showDialog = showDialog, onConfirm = {
-        showDialog = false
-        onImageClicked(imageId)
-    }) {
-        showDialog = false
     }
 
 }
 
 @Composable
-private fun EmptyView(modifier: Modifier) {
+fun EmptyView(modifier: Modifier = Modifier) {
     PlaceHolderView(
         modifier = modifier,
         icon = Icons.Outlined.Pets,
@@ -188,7 +208,7 @@ fun ErrorView(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ImageListView(
+fun ImageListView(
     images: List<ImageModel>,
     onImageClicked: (Long) -> Unit,
 ) {

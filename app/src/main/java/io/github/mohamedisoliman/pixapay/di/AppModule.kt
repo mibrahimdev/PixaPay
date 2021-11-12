@@ -7,7 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.mohamedisoliman.pixapay.data.ImagesRepository
-import io.github.mohamedisoliman.pixapay.data.ImagesRepositoryContract
+import io.github.mohamedisoliman.pixapay.domain.search.ImagesRepositoryContract
 import io.github.mohamedisoliman.pixapay.data.local.*
 import io.github.mohamedisoliman.pixapay.data.remote.RemotePixabayContract
 import io.github.mohamedisoliman.pixapay.data.remote.pixabayApi
