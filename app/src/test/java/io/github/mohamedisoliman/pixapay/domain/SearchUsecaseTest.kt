@@ -1,6 +1,6 @@
 package io.github.mohamedisoliman.pixapay.domain
 
-import io.github.mohamedisoliman.pixapay.data.ImagesRepositoryContract
+import io.github.mohamedisoliman.pixapay.domain.search.ImagesRepositoryContract
 import io.github.mohamedisoliman.pixapay.data.entities.PixabayImage
 import io.github.mohamedisoliman.pixapay.domain.search.SearchState
 import io.github.mohamedisoliman.pixapay.domain.search.SearchUsecase

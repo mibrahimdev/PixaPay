@@ -1,4 +1,4 @@
-package io.github.mohamedisoliman.pixapay.data
+package io.github.mohamedisoliman.pixapay.domain.search
 
 import io.github.mohamedisoliman.pixapay.data.entities.PixabayImage
 import kotlinx.coroutines.flow.Flow
