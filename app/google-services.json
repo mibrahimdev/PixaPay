@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "350662008740",
+    "project_id": "pixapay-3b906",
+    "storage_bucket": "pixapay-3b906.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350662008740:android:b28842bf9a353639ff2b31",
+        "android_client_info": {
+          "package_name": "io.github.mohamedisoliman.pixapay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350662008740-3t3ps2kfj0o51r4q5nr3uc5bol7eoifr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChznM3A0S7UlQBxmrQcS1clqgf-9Lw6to"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350662008740-3t3ps2kfj0o51r4q5nr3uc5bol7eoifr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
