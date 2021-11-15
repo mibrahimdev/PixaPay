@@ -24,7 +24,7 @@ android {
         }
 
         buildConfigField("String", "API_KEY", API_KEY)
-        buildConfigField("String", "BASE_URL", BASE_URL)
+        buildConfigField("String", "BASE_URL", "https://pixabay.com/api/")
     }
 
     buildTypes {
@@ -113,7 +113,6 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:29.0.0')
     implementation 'com.google.firebase:firebase-analytics'
-
 
 
 }
