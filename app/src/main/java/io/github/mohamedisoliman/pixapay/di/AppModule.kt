@@ -25,7 +25,6 @@ object AppModule {
     }
 
     @Provides
-    @Singleton
     fun providesImagesDao(appDatabase: AppDatabase): ImageDao {
         return appDatabase.imagesDao()
     }
