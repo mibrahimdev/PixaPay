@@ -1,5 +1,6 @@
 package io.github.mohamedisoliman.pixapay.domain
 
+import io.github.mohamedisoliman.pixapay.UiState
 import io.github.mohamedisoliman.pixapay.data.ImagesRepositoryContract
 import io.github.mohamedisoliman.pixapay.data.entities.toImageModel
 import io.github.mohamedisoliman.pixapay.data.entities.ImageModel
@@ -13,16 +14,37 @@ class SearchUsecase @Inject constructor(
     operator fun invoke(query: String): Flow<SearchState> {
         return imagesRepository.search(query)
             .map { list -> list.map { it.toImageModel() } }
-            .map { if (it.isEmpty()) SearchState.Empty else SearchState.Success(it) }
-            .onStart { emit(SearchState.Loading) }
-            .catch { emit(SearchState.Error(it)) }
+            .map {
+                if (it.isEmpty())
+                    SearchState.EmptyResult
+                else
+                    SearchState.Success(searchText = query, result = it)
+            }.onStart { emit(SearchState.Loading) }
+            .catch { emit(SearchState.Error(searchText = query, it)) }
     }
 
 }
 
-sealed class SearchState {
-    object Empty : SearchState()
-    class Success(val images: List<ImageModel>) : SearchState()
-    class Error(val throwable: Throwable) : SearchState()
-    object Loading : SearchState()
+sealed class SearchState(
+    val isLoading: Boolean = false,
+    val result: List<ImageModel>? = null,
+    val searchText: String? = null,
+    val throwable: Throwable? = null,
+) : UiState {
+
+    class IDLE(searchText: String?) : SearchState(searchText = searchText)
+
+    object EmptyResult : SearchState()
+
+    class Success(
+        result: List<ImageModel>?,
+        searchText: String?,
+    ) : SearchState(result = result, searchText = searchText)
+
+    class Error(
+        searchText: String? = null,
+        throwable: Throwable? = null,
+    ) : SearchState(searchText = searchText, throwable = throwable)
+
+    object Loading : SearchState(isLoading = true)
 }
